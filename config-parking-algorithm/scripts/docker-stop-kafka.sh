@@ -1,0 +1,1 @@
+docker stop kafka_zookeeper_test kafka_kafka_test

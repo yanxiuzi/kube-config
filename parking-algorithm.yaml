@@ -1,0 +1,102 @@
+apiVersion: v1
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: parking-algorithm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: parking-algorithm
+  template:
+    metadata:
+      labels:
+        app: parking-algorithm
+    spec:
+      containers:
+      - name: parking-algorithm-video-engine
+        image: harbor.tslsmart.x/ai-team/video-engine:V2.8.0
+        # command: ["tail"]
+        # args: ["-f", "/dev/null"]
+        ports:
+        - containerPort: 9397
+        volumeMounts:
+        - name: config-volume
+          mountPath: /engine/config
+      imagePullSecrets:
+      - name: harbor-tslsmart-x
+      volumes:
+      - name: config-volume
+        persistentVolumeClaim:
+          claimName: config-pvc
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: parking-algorithm
+spec:
+  type: NodePort
+  selector:
+    app: parking-algorithm
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9397
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: config-pv
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadOnlyMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: manual
+  hostPath:
+    path: /home/tsl/kube-configs/config-parking-algorithm
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: config-pvc
+spec:
+  accessModes:
+    - ReadOnlyMany
+  storageClassName: manual
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: config-pv
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: harbor-tslsmart-x
+type: kubernetes.io/dockerconfigjson
+stringData:
+  .dockerconfigjson: |
+    {
+        "auths": {
+                "192.168.118.143": {
+                        "auth": "YWxnby1wYWNrYWdlOlRzbHNtYXJ0MTIzIUAj"
+                },
+                "harbor.park.ai-team.dev:7001": {
+                        "auth": "YWktdGVhbTozZWRjJFJGVg=="
+                },
+                "harbor.tslsmart.x": {
+                        "auth": "YWxnby1wYWNrYWdlOlRzbHNtYXJ0MTIzIUAj"
+                }
+        }
+    }

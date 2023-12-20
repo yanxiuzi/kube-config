@@ -1,0 +1,16 @@
+{
+    "base": {
+        "trace": "testTaskKafka",
+        "ts": "1632653582"
+    },
+    "task": {
+        "videoUrl": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4",
+        "videoStreamType": 0,
+        "respCbUrl": "kafka://192.168.118.171:32769/test",
+        "respCbProtocol": 2,
+        "taskSatatus": 0,
+        "taskProgress": 0,
+        "algoJsonConfig": "{\"algoType\":18,\"regions\":[{\"regionType\":8,\"vertexList\":[{\"x\":0,\"y\":0},{\"x\":352,\"y\":0},{\"x\":352,\"y\":288},{\"x\":0,\"y\":288}]}],\"parList\":[{\"parType\":115,\"value\":0.0},{\"parType\":108,\"value\":1.0},{\"parType\":200,\"value\":0.5},{\"parType\":302,\"value\":1.0}]}",
+        "usrData": "testUserData"
+    }
+}

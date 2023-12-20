@@ -1,0 +1,1 @@
+./grpcui -port 19397 -proto common.proto -proto service.proto -plaintext localhost:9397

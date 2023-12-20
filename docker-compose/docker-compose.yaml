@@ -1,0 +1,30 @@
+version: '3'
+services:
+  video-engine_parking:
+    image: harbor.tslsmart.x/ai-team/video-engine:V2.8.0
+    container_name: video-engine_parking
+    restart: always
+    ports:
+      - 9397:9397
+    volumes:
+      - $PWD/../config-parking-algorithm:/engine/config
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=0
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - LD_LIBRARY_PATH=/engine/config/lib
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp=unconfined
+    ulimits:
+      core: -1
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #       - driver: nvidia
+    #         device_ids: ['5']
+    #         capabilities: [gpu]
+    # entrypoint: bash
+    # stdin_open: true
+    # tty: true

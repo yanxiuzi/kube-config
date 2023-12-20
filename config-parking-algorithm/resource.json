@@ -1,0 +1,9 @@
+{
+    "cpu": 8,
+    "memory": 8,
+    "gpu": 1,
+    "device_memory": 8, //显存 GB
+    "env": {
+        "LD_LIBRARY_PATH": "/engine/config/lib"
+    }
+}

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package common;
+option go_package = "ai-team.dev/engine-proto/proto";
+
+message Request {
+    string trace = 1;
+    int64 ts = 2;
+}
+
+message Response {
+    int64 code = 1;
+    string message = 2;
+    string trace = 3;
+    int64  ts = 4;
+
+}

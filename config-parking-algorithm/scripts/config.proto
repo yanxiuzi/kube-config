@@ -1,0 +1,109 @@
+syntax = "proto3";
+package config;
+option go_package="ai-team.dev/engine-proto/config";
+
+message VoiceEngine
+{
+    message Global
+    {
+        string log_properties_path = 1;
+    }
+    message Audio
+    {
+        string sdk_path = 1;
+        string asr_config = 2;
+        int32 asr_timeout_ms = 3;
+        int32 decode_thread_count = 4;
+        bool record_voice_data = 5;
+    }
+    message Service
+    {
+        string listening_url = 1;
+    }
+
+    Global global =1;
+    Service service = 2;
+    Audio audio = 3;
+}
+
+message PredictEngine
+{
+    message Global
+    {
+        string log_properties_file = 1;
+    }
+    message Service
+    {
+        string listening_url = 1;
+    }
+    message AlgoPackage
+    {
+        int32 time_out_ms = 1;
+        string py_module_path = 2;
+        string py_module_name = 3;
+        string func_model_init = 4;
+        string func_get_result = 5;
+        string arg_model_path = 6;
+        string arg_device_type = 7;      // dnn, lightgbm
+        int32 arg_input_data_type = 8;  // 0=string, 1=list
+    }
+
+    Global global = 1;
+    Service service = 2;
+    AlgoPackage algorithm = 3;
+}
+
+
+message ImageEngine
+{
+    message Global
+    {
+        string log_properties_file = 1;
+    }
+    message Service
+    {
+        string listening_url = 1;
+    }
+    message AlgoPackage
+    {
+        int32 time_out_ms = 1;
+        string py_module_path = 2;
+        string py_module_name = 3;
+        string func_model_init = 4;
+        string func_get_result = 5;
+        string arg_model_path = 6;
+        string arg_device_type = 7;      // dnn, lightgbm
+        string image_format = 8;
+        uint32 max_image_width = 9;
+        uint32 max_image_height = 10;
+    }
+
+    Global global = 1;
+    Service service = 2;
+    AlgoPackage algorithm = 3;
+
+}
+
+message VideoEngine
+{
+    message Global
+    {
+        string log_properties_file = 1;
+    }
+    message Service
+    {
+        string listening_url = 1;
+    }
+    message Algorithm
+    {
+        string sdk_path = 1;
+        string init_json_conf = 2;
+    }
+
+    Global global = 1;
+    Service service = 2;
+    Algorithm algorithm = 3;
+    int32 task_queue_quota = 4;         //任务队列最大值
+    int32 result_cb_timeout = 5;        // 回调超时
+    int32 retry = 6;                    // 重试次数
+}

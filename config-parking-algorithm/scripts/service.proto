@@ -1,0 +1,192 @@
+syntax = "proto3";
+import "common.proto";
+package service;
+option go_package="ai-team.dev/engine-proto/proto";
+
+
+//音频服务
+service VoiceService {
+    rpc Asr(AsrRequest) returns (AsrResponse);
+}
+
+message AsrRequest {
+    common.Request base = 1;
+
+    bytes voice = 2;
+    string voiceUrl = 3;
+}
+
+message AsrResponse {
+    common.Response base = 1;
+
+    string result = 2;
+}
+
+
+//推荐预测服务
+service PredictService {
+    rpc Predict(PredictRequest) returns (PredictResponse);
+}
+
+message PredictRequest {
+    common.Request base = 1;
+
+    string content = 2;
+}
+
+message PredictResponse {
+    common.Response base = 1;
+
+    string result = 2;
+}
+
+
+//图片分析服务
+service ImageService {
+    rpc ImageRecognition(ImageRequest) returns (ImageResponse);
+}
+
+message ImageRequest {
+    common.Request base = 1;
+
+    repeated string scenes = 2;  // 调用模型场景场景
+    oneof image {
+        string url = 3;
+        bytes data = 4;
+    }
+}
+
+message ImageResponse {
+    common.Response base = 1;
+
+    string resultJson = 2;
+}
+
+
+// 视频分析服务
+service VideoService
+{
+    rpc TaskAdd(TaskAddReq) returns(TaskAddResp);
+    rpc TaskDel(TaskDelReq) returns(TaskDelResp);
+    rpc TaskQuery(TaskQueryReq) returns(TaskQueryResp);
+    rpc TaskUpdateVideoUrl(TaskUpdateVideoUrlReq) returns(TaskUpdateVideoUrlResp);  // 更新任务，主要为了更新视频流url，引擎内部会重定向到新的地址拉流，如果url没变则不会更新。
+    rpc TaskGetAll(TaskGetAllReq) returns(TaskGetAllResp);
+    rpc TaskGetManagerStat(TaskGetManagerStatReq) returns(TaskGetManagerStatResp);
+}
+
+service VideoCbService
+{
+    rpc CbResult(VideoCbReq) returns(common.Response);
+}
+
+message VideoCbReq {
+    common.Response base = 1;
+    string taskId = 2;
+    string resultJson = 3;                      // 分析结果
+    string usrData = 4;	                        // 用户自定义数据，添加任务时设置的
+}
+
+message Task
+{
+    enum StreamType //枚举消息类型
+    {
+        RTSP = 0;
+        FILE = 1;
+    }
+
+    enum RespCbProtocol
+    {
+        RPC = 0;
+        HTTP = 1;
+        KAFKA = 2;
+    }
+    enum TaskStatus{
+        UNSTART = 0;
+        RUNNING = 1;
+        STOPED = 2;
+        ERROR = 3;
+    }
+    string          taskId = 1;                 // 任务id, 引擎内部赋值。
+    string	    	videoUrl = 2;	            // 视频源
+	StreamType  	videoStreamType = 3;	    // 视频流类型，0-rtsp, 1-file 
+	string	    	respCbUrl = 4;	            // 分析结果回调地址
+	RespCbProtocol  respCbProtocol = 5;	        // 分析结果回调协议 0-rpc, 1-http, 2-kafka(目前暂不支持rpc)
+	string          kafkaKey = 6;	            // 仅 respCbProtocol 设置为kafka时需要
+	TaskStatus		taskSatatus = 7;            // 0-停止; 1-运行; 2-结束; 3-异常
+	int32		    taskProgress = 8;           // 任务进度百分比, 仅当 videoStreamType 为 file 时有效
+	string		    algoJsonConfig = 9;         // 算法配置
+	string		    usrData = 10;	            // 用户自定义数据
+}
+
+message TaskAddReq
+{
+    common.Request base = 1;
+    Task task = 2;
+}
+
+message TaskAddResp
+{
+    common.Response base = 1;
+    string taskId = 2;
+}
+
+message TaskQueryReq
+{
+    common.Request base   = 1;
+    string taskId = 2;              // 任务id
+}
+
+message TaskQueryResp
+{
+    common.Response base = 1;
+    Task task = 2;
+}
+
+message TaskUpdateVideoUrlReq
+{
+    common.Request base = 1;
+    string taskId = 2;
+    string videoUrl = 3;
+}
+
+message TaskUpdateVideoUrlResp
+{
+    common.Response base = 1;
+    Task task = 2;      // 返回更新后的任务
+}
+
+message TaskDelReq
+{
+    common.Request base = 1;
+    string taskId = 2;
+}
+
+message TaskDelResp
+{
+    common.Response base = 1;
+    string taskId = 2;              //被删除的taskid
+    int32 remainTaskCnt = 3;        //剩余任务个数
+}
+
+message TaskGetAllReq
+{
+    common.Request base = 1;
+}
+
+message TaskGetAllResp
+{
+    common.Response base = 1;
+    repeated Task taskList = 2;
+}
+
+message TaskGetManagerStatReq
+{
+    common.Request base = 1;
+}
+
+message TaskGetManagerStatResp
+{
+    common.Response base = 1;
+    int32 runningTaskCnt = 2;    //当前任务个数
+    int32 maxTaskCnt = 3;        //总任务个数
+}

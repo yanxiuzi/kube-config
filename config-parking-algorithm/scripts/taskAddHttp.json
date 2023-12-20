@@ -1,0 +1,17 @@
+{    "base": {
+    "trace": "testTaskHttp",
+    "ts": "1632653582"
+},
+    "task": {
+        "taskId": "测试1",
+        "videoUrl": "rtsp://ai-team.dev/atm",
+        "videoStreamType": "RTSP",
+        "respCbUrl": "https://engine-adapter.ai-team.smoketest.cn/engine/video/callback/tsl/pc/bky5ow6yayryy",
+        "respCbProtocol": "HTTP",
+        "kafkaKey": "",
+        "taskSatatus": "UNSTART",
+        "taskProgress": 0,
+        "algoJsonConfig": "{\"algoType\":18,\"regions\":[{\"regionType\":8,\"vertexList\":[{\"x\":0,\"y\":0},{\"x\":352,\"y\":0},{\"x\":352,\"y\":288},{\"x\":0,\"y\":288}]}],\"parList\":[{\"parType\":115,\"value\":0.0},{\"parType\":108,\"value\":1.0},{\"parType\":200,\"value\":0.5},{\"parType\":302,\"value\":1.0}]}",
+        "usrData": ""
+    }
+}

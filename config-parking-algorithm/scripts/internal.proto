@@ -1,0 +1,16 @@
+syntax = "proto3";
+package internal;
+option go_package="ai-team.dev/engine-proto/internal";
+
+message Timer
+{
+	int32 timerId = 1;
+	int32 timeout = 2;
+	bool  loop    = 3;
+	bytes context = 4;
+}
+
+message Dummy
+{
+	int32 id = 1;
+}

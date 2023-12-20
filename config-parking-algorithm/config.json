@@ -1,0 +1,38 @@
+{
+    "global": {
+        "log_properties_file": "config/log.properties"
+    },
+    "service": {
+        "listening_url": "0.0.0.0:9397"
+    },
+    "algorithm": {
+        "sdk_path": "./config/lib/libivs.so",
+        "init_json_conf": "{\"modelDir\":\"./config/model/\"}"
+    },
+    "task_queue_quota": 8,
+    "result_cb_timeout": 5,
+    "retry": 3,
+    "decoder":
+    {
+        "use_hwaccel": true,
+        "hw_dev_type": "cuda",
+        "hw_device_id": "0"
+    },
+    "storage_no_use": {
+        "url": "https://s3.ai-team.dev",
+        "access_key": "si-minio",
+        "secret_key": "si-minio",
+        "session_token": "",
+        "bucket_name": "video-algorithm.ppl-cnt-detect",
+        "num_of_retries": 0,
+        "json_template":
+        {
+            "array_key": "humanCountMap",
+            "trace_id": "humanId",
+            "x": "roiX",
+            "y": "roiY",
+            "width": "roiWidth",
+            "height": "roiHeight"
+        }
+    }
+}

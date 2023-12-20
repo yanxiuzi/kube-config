@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grpc-ingress
+  annotations:
+    # nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - spatial-dim-6.org
+    secretName: ingress-secret
+  rules:
+  - host: spatial-dim-6.org
+    http:
+      paths:
+      - path: /parking
+        pathType: Prefix
+        backend:
+          service:
+            name: parking-algorithm
+            port:
+              number: 80
+      # - path: "/hello"
+      #   pathType: Prefix
+      #   backend:
+      #     service:
+      #       name: hello
+      #       port:
+      #         number: 8080

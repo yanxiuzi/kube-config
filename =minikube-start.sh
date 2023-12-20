@@ -1,0 +1,1 @@
+minikube start  --addons=ingress  --image-mirror-country=cn --insecure-registry=harbor.tslsmart.x,192.168.118.143 --ports=80:80 --ports=443:443 --mount --mount-string=$PWD:$PWD
